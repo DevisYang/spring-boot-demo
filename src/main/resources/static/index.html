@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Web Chat</title>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="html5shiv.min.js"></script>
+    <script src="html5shiv-printshiv.min.js"></script>
+    <![endif]-->
+
+    <script type="text/javascript" src="sockjs.min.js"></script>
+    <script type="text/javascript" src="stomp.min.js"></script>
+</head>
+
+<body>
+<h1 id="title">未收到消息</h1>
+<script type="text/javascript">
+    var socket = new SockJS("/chat"); // 创建socket对象，参数必须和WebsocketConfiguration#registerStompEndpoints下设置的一致
+    var stompClient = Stomp.over(socket); // 使用stomp协议
+    stompClient.connect({}, function (frame) { // 连接
+        // 订阅消息
+        stompClient.subscribe("/topic/greetings", function (greeting) {
+            var nv = document.getElementById("title");
+            nv.innerHTML = greeting.body;
+        });
+        stompClient.send("/app/hello", {}, '{"name":"程序员锡哥"}');
+    });
+</script>
+</body>
+</html>
+
+</body>
+</html>
